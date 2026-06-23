@@ -1,47 +1,162 @@
-<!DOCTYPE html>
-<html lang="es">
+<!DOCTYPE HTML>
+<!--
+    Phantom by HTML5 UP
+    Adaptado para portafolio personal
+-->
+<html>
+    <head>
+        <title>Omar Fernández | Portafolio</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+        <link rel="stylesheet" href="assets/css/main.css" />
+        <noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+    </head>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Omar Fernández | Portfolio</title>
+    <body class="is-preload">
 
-    <link rel="stylesheet" href="style.css">
-</head>
+        <div id="wrapper">
 
-<body>
+            <!-- HEADER -->
+            <header id="header">
+                <div class="inner">
 
-    <header>
-        <h1>Omar Fernández Olguín</h1>
+                    <a href="index.html" class="logo">
+                        <span class="symbol"><img src="images/logo.svg" alt="" /></span>
+                        <span class="title">Omar Fernández. Portafolio</span>
+                    </a>
 
-        <p>
-            Ingeniero Físico · Data Scientist · Docente Universitario
-        </p>
-    </header>
+                    <nav>
+                        <ul>
+                            <li><a href="#menu">Menu</a></li>
+                        </ul>
+                    </nav>
 
-    <main>
+                </div>
+            </header>
 
-        <section>
-            <h2>Bienvenido</h2>
+            <!-- MENU -->
+            <nav id="menu">
+                <h2>Menu</h2>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="#projects">Proyectos</a></li>
+                    <li><a href="#about">Sobre mí</a></li>
+                    <li><a href="#contact">Contacto</a></li>
+                </ul>
+            </nav>
 
-            <p>
-                Utilizo herramientas matemáticas y computacionales para
-                transformar datos e información en soluciones tecnológicas,
-                combinando modelamiento físico, ciencia de datos y programación aplicada.
-            </p>
-        </section>
+            <!-- MAIN -->
+            <div id="main">
+                <div class="inner">
 
-        <section>
-            <h2>Proyectos</h2>
+                    <!-- INTRO -->
+                    <header>
+                        <h1>
+                            Ingeniería Física, Ciencia de Datos y Modelado Computacional
+                        </h1>
 
-            <p>
-                Próximamente encontrarás aquí mis proyectos de ciencia de datos,
-                modelamiento físico, geoestadística y aprendizaje automático.
-            </p>
-        </section>
+                        <p>
+                            Ingeniero Físico · Data Scientist · Docente Universitario<br/>
+							Modelamiento matemático, machine learning y ciencia de datos aplicada a sistemas complejos.
+                        </p>
+                    </header>
 
-    </main>
+                    <!-- PROYECTOS -->
+                    <section class="tiles" id="projects">
 
-</body>
+                        <article class="style1">
+                            <span class="image">
+                                <img src="images/pic01.jpg" alt="" />
+                            </span>
+                            <a href="#">
+                                <h2>Pronóstico Temporal de Contaminantes Atmosféricos</h2>
+                                <div class="content">
+                                    <p>Modelo de deep learning basado en redes LSTM para la predicción a corto plazo (1 hora), utilizando series de tiempo históricas de PM2.5 y variables meteorológicas para capturar la dinámica temporal de la calidad del aire.</p>
+                                </div>
+                            </a>
+                        </article>
 
+                        <article class="style2">
+                            <span class="image">
+                                <img src="images/pic02.jpg" alt="" />
+                            </span>
+                            <a href="#">
+                                <h2>Predicción Espacial de Calidad del Aire</h2>
+                                <div class="content">
+                                    <p>Modelo geoestadístico basado en kriging para la predicción espacial de contaminantes atmosféricos, orientado a densificar redes de sensores, estimar concentraciones en zonas no muestreadas e identificar patrones de contaminación y hotspots ambientales.</p>
+                                </div>
+                            </a>
+                        </article>
+
+                        <article class="style3">
+                            <span class="image">
+                                <img src="images/pic03.jpg" alt="" />
+                            </span>
+                            <a href="#">
+                                <h2>Calibración de Sensores Ambientales con ML</h2>
+                                <div class="content">
+                                    <p>Sistema inteligente de calibración de sensores ambientales que integra machine learning y datos meteorológicos para mejorar la calidad de las mediciones en redes de monitoreo.</p>
+                                </div>
+                            </a>
+                        </article>
+
+                        <article class="style4">
+                            <span class="image">
+                                <img src="images/pic04.jpg" alt="" />
+                            </span>
+                            <a href="#">
+                                <h2>Sickle Scan App</h2>
+                                <div class="content">
+                                    <p>Aplicación de escritorio en Python para captura, procesamiento y reconstrucción en tiempo real de hologramas digitales, con interfaz gráfica en PyQt5.</p>
+                                </div>
+                            </a>
+                        </article>
+
+                    </section>
+
+                    <!-- ABOUT -->
+                    <section id="about" style="margin-top: 3rem;">
+                        <h2>Sobre mí</h2>
+
+                        <p>
+                            Ingeniero Físico, Data Scientist y docente universitario, trabajando en la intersección entre física, ciencia de datos y computación científica.
+He desarrollado soluciones en modelamiento de sistemas complejos, análisis de datos y procesamiento computacional aplicado.
+                        </p>
+                    </section>
+
+                    <!-- CONTACT -->
+                    <section id="contact" style="margin-top: 3rem;">
+                        <h2>Contacto</h2>
+						<p>
+							Email: <a href="mailto:omar.fernandez.o@usach.cl">omar.fernandez.o@usach.cl</a><br/>
+							GitHub: <a href="https://github.com/Omar526" target="_blank">github.com/Omar526</a><br/>
+							LinkedIn: <a href="https://www.linkedin.com/in/omar-fernández-olguín-9a2610224" target="_blank">linkedin.com/in/omar-fernández-olguín</a>
+						</p>
+                    </section>
+
+                </div>
+            </div>
+
+            <!-- FOOTER -->
+            <footer id="footer">
+                <div class="inner">
+
+                    <ul class="copyright">
+                        <li>&copy; Omar Fernández</li>
+                        <li>Portfolio personal</li>
+                    </ul>
+
+                </div>
+            </footer>
+
+        </div>
+
+        <!-- SCRIPTS -->
+        <script src="assets/js/jquery.min.js"></script>
+        <script src="assets/js/browser.min.js"></script>
+        <script src="assets/js/breakpoints.min.js"></script>
+        <script src="assets/js/util.js"></script>
+        <script src="assets/js/main.js"></script>
+
+    </body>
 </html>
