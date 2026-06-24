@@ -3327,3 +3327,44 @@ input, select, textarea {
 			}
 
 		}
+
+.gallery-scroll {
+    display: flex;
+    gap: 16px;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    padding: 10px 0;
+
+    scroll-snap-type: x mandatory;
+
+    -webkit-overflow-scrolling: touch;
+}
+
+/* cada imagen */
+.gallery-scroll img {
+    height: 250px;
+    flex: 0 0 auto;
+
+    border-radius: 8px;
+
+    scroll-snap-align: center;
+
+    transition: transform 0.2s ease;
+}
+
+/* efecto hover opcional */
+.gallery-scroll img:hover {
+    transform: scale(1.03);
+}
+
+/* opcional: esconder scrollbar */
+.gallery-scroll::-webkit-scrollbar {
+    height: 8px;
+}
+
+.gallery-scroll::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 4px;
+}
