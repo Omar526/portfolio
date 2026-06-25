@@ -1,0 +1,638 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Calibración Inteligente de Sensores | Omar Fernández</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, user-scalable=no"
+    />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <noscript>
+      <link rel="stylesheet" href="../assets/css/noscript.css" />
+    </noscript>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>
+      hljs.highlightAll();
+    </script>
+    <script>
+      MathJax = {
+        tex: { inlineMath: [["$", "$"]] },
+        svg: { fontCache: "global" },
+      };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+  </head>
+
+  <body class="is-preload">
+    <div id="wrapper">
+      <header id="header">
+        <div class="inner">
+          <a href="../index.html" class="logo">
+            <span class="symbol">
+              <img
+                src="../images/ml-sensors/neural_logo.png"
+                alt="Data Science Icon"
+              />
+            </span>
+            <span class="title">Omar Fernández | Portafolio</span>
+          </a>
+          <nav>
+            <ul>
+              <li><a href="#menu">Menú</a></li>
+            </ul>
+          </nav>
+        </div>
+      </header>
+
+      <nav id="menu">
+        <h2>Estructura del Proyecto</h2>
+        <ul>
+          <li><a href="../index.html">Inicio</a></li>
+          <li><a href="#context">Contexto y Objetivos</a></li>
+          <li><a href="#eda">Fenómenos Identificados</a></li>
+          <li><a href="#pipeline">Formulación del Modelo</a></li>
+          <li><a href="#workflow">Flujo de Trabajo</a></li>
+          <li><a href="#models">Modelos Evaluados</a></li>
+          <li><a href="#code">Implementación</a></li>
+          <li><a href="#validation">Resultados y Validación</a></li>
+          <li><a href="#temporal">Análisis Temporal</a></li>
+          <li><a href="#insights">Insights y Conclusiones</a></li>
+          <li><a href="#gallery">Galería</a></li>
+          <li><a href="#stack">Stack Tecnológico</a></li>
+        </ul>
+      </nav>
+
+      <div id="main">
+        <div class="inner">
+
+          <!-- ═══════════ HERO ═══════════ -->
+          <section style="text-align: center">
+            <h2>Calibración Inteligente de Sensores Ambientales</h2>
+            <p style="font-size: 1.2rem; max-width: 800px; margin: 0 auto 20px auto;">
+              Desarrollo de un modelo de Machine Learning para la corrección
+              multivariable de señales de sensores electroquímicos, mejorando la
+              precisión de redes de monitoreo.
+            </p>
+            <p>
+              <strong>Data Scientist</strong><br />
+              Modelamiento de Señales Avanzado · Airflux · CEDENNA
+            </p>
+            <ul class="actions special">
+              <li>
+                <a href="#pipeline" class="button primary">Ver Modelos</a>
+              </li>
+              <li>
+                <a href="../index.html" class="button">Volver al Portafolio</a>
+              </li>
+            </ul>
+            <figure style="margin-top: 3rem; margin-bottom: 3rem; text-align: center">
+              <span class="image fit" style="margin: 0">
+                <img
+                  src="../images/ml-sensors/ml-pipeline.png"
+                  alt="Pipeline de Machine Learning y Analítica de Señales Ambientales"
+                />
+              </span>
+              <figcaption
+                style="font-style: italic; font-size: 0.9rem; color: #777; margin-top: 0.75rem;"
+              >
+                El modelo integra múltiples variables ambientales y
+                meteorológicas para compensar errores y sesgos de los sensores,
+                generando estimaciones que reproducen con mayor fidelidad el
+                comportamiento observado por equipos de referencia.
+              </figcaption>
+            </figure>
+          </section>
+
+          <hr />
+
+          <!-- ═══════════ CONTEXTO ═══════════ -->
+          <section id="context">
+            <h2>Contexto del Problema y Objetivos Técnicos</h2>
+            <div class="row">
+              <div class="col-12">
+                <p>
+                  El monitoreo de la calidad del aire regulatorio en Chile
+                  depende de estaciones de referencia (SINCA) de alta fidelidad
+                  pero con costos críticos de implementación (~<strong>$245,000 USD</strong>
+                  por unidad), limitando la resolución espacial en zonas
+                  críticas urbanas e industriales. Los sensores electroquímicos
+                  de Airflux (~<strong>$754 USD</strong>) permiten densificar la
+                  red, pero sus señales crudas sufren de un
+                  <strong>sesgo inicial de hasta el 30%</strong> debido a
+                  factores ambientales y fenómenos físicos internos. La EPA
+                  (Environmental Protection Agency) sugiere alcanzar un
+                  porcentaje de sesgo menor al 20 % para poder utilizar los
+                  sensores como instrumentos complementarios.
+                </p>
+              </div>
+            </div>
+
+            <!-- GRÁFICO: sesgo sensor vs referencia SINCA -->
+            <div class="row" style="margin-bottom: 2rem;">
+              <div class="col-12" style="display: flex; justify-content: center;">
+                <img
+                  src="../images/ml-sensors/problema.png"
+                  alt="Comparación entre señal cruda del sensor y referencia SINCA, mostrando el sesgo de hasta 30%"
+                  style="max-width: 80%; height: auto;"
+                />
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-8 col-12-medium">
+                <p>
+                  El <strong>objetivo</strong> de este desarrollo consiste en
+                  diseñar y validar un modelo de ML robusto que actúe como una
+                  capa de calibración matemática inteligente. El sistema procesa
+                  los voltajes de los electrodos de los sensores y realiza una
+                  compensación para remover el ruido térmico, la reactividad
+                  cruzada y la degradación temporal del hardware del sensor,
+                  logrando que la precisión de los sensores de bajo costo
+                  cumpla con los estándares de calidad establecidos por la EPA,
+                  específicamente alcanzar un sesgo menor al 20 %.
+                </p>
+              </div>
+              <div class="col-4 col-12-medium">
+                <blockquote>
+                  "El foco del proyecto radica en resolver matemáticamente las
+                  limitaciones del hardware mediante aprendizaje automático
+                  multivariable."
+                </blockquote>
+              </div>
+            </div>
+          </section>
+
+          <hr />
+
+          <!-- ═══════════ EDA ═══════════ -->
+          <section id="eda">
+            <h2>Identificación de los Fenómenos que Limitan la Precisión</h2>
+            <p>
+              Para modelar la corrección, fue crítico mapear matemáticamente el
+              comportamiento de las señales en entornos geográficos reales: la
+              campaña de NO<sub>2</sub> en un entorno de alta densidad urbana
+              (La Florida, Santiago) y la campaña de SO<sub>2</sub> en una zona
+              costera saturada (Quintero, Valparaíso). El análisis exploratorio
+              reveló las tres principales interferencias físicas a resolver
+              (tomando como ejemplo el NO<sub>2</sub>):
+            </p>
+            <div class="box alt">
+              <div class="row gtr-50 gtr-uniform">
+                <div class="col-4">
+                  <span class="image fit">
+                    <img
+                      src="../images/ml-sensors/scatter_temp.png"
+                      alt="Correlación No Lineal con Temperatura"
+                    />
+                  </span>
+                  <h4 style="text-align: center; margin-top: 0.5rem;">Ruido Térmico</h4>
+                  <p style="font-size: 0.9rem; text-align: center;">
+                    La señal eléctrica por sí sola no basta. La temperatura
+                    modifica la relación entre voltaje y concentración.
+                  </p>
+                </div>
+                <div class="col-4">
+                  <span class="image fit">
+                    <img
+                      src="../images/ml-sensors/scatter_rh.png"
+                      alt="Histéresis por Humedad Relativa"
+                    />
+                  </span>
+                  <h4 style="text-align: center; margin-top: 0.5rem;">Humedad del Aire</h4>
+                  <p style="font-size: 0.9rem; text-align: center;">
+                    La humedad altera las condiciones electroquímicas internas
+                    del sensor e introduce incertidumbre en la medición.
+                  </p>
+                </div>
+                <div class="col-4">
+                  <span class="image fit">
+                    <img
+                      src="../images/ml-sensors/scatter_o3.png"
+                      alt="Reactividad Cruzada con O3"
+                    />
+                  </span>
+                  <h4 style="text-align: center; margin-top: 0.5rem;">Reactividad Cruzada</h4>
+                  <p style="font-size: 0.9rem; text-align: center;">
+                    La presencia de O<sub>3</sub> modifica la señal y genera
+                    falsas contribuciones en la medición.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <hr />
+
+          <!-- ═══════════ PIPELINE ═══════════ -->
+          <section id="pipeline">
+            <h2>Formulación del Modelo de Calibración</h2>
+            <p>
+              La calibración inteligente propuesta consiste en transformar la
+              señal cruda de voltaje proveniente de los electrodos del sensor en
+              estimaciones de concentración de gas, compensando simultáneamente
+              las limitaciones inherentes del hardware mediante la incorporación
+              explícita de las variables interferentes identificadas
+              anteriormente.
+            </p>
+            <p>
+              Desde una perspectiva matemática, el problema se formaliza como
+              una función de transferencia multivariable no lineal que aproxima
+              la relación entre el espacio de variables
+              instrumentales-meteorológicas y la concentración real del
+              contaminante:
+            </p>
+
+            <div style="text-align: center; margin: 2rem 0;">
+              <p style="font-size: 1.6rem; margin: 0;">
+                $NO_2 = f_{\text{cal}}(S,\ T,\ RH,\ O_3)$
+              </p>
+            </div>
+
+            <p>
+              donde $S$ representa la señal cruda de voltaje del sensor,
+              $T$ la temperatura ambiente, $RH$ la humedad relativa y
+              $O_3$ la concentración de ozono, utilizada como variable de
+              corrección por reactividad cruzada.
+            </p>
+
+            <h3 id="workflow">Flujo de Trabajo</h3>
+            <p>
+              La función de transferencia $f_{\text{cal}}$ fue aproximada
+              mediante un conjunto de modelos con complejidad creciente,
+              siguiendo el siguiente pipeline de entrenamiento y evaluación:
+            </p>
+            <div style="text-align: center; margin: 2rem 0;">
+              <img
+                src="../images/ml-sensors/flujo_de_datos_b.png"
+                alt="Diagrama del flujo de trabajo: datos crudos, preprocesamiento, entrenamiento de modelos y evaluación"
+                style="max-width: 60%; height: auto;"
+              />
+            </div>
+
+            <h3 id="models">Modelos Evaluados</h3>
+            <p>
+              Cada modelo fue entrenado con el 80 % de los datos disponibles,
+              reservando el 20 % restante para evaluación. Los tres algoritmos,
+              obtenidos desde scikit-learn, se ordenan a continuación por
+              complejidad creciente:
+            </p>
+            <div class="row">
+              <div class="col-4 col-12-medium">
+                <div style="text-align: center; margin-bottom: 1rem;">
+                  <img
+                    src="../images/ml-sensors/logo_linear_reg.png"
+                    alt="Regresión Lineal"
+                    style="width: 90px; height: auto; opacity: 0.9;"
+                  />
+                </div>
+                <h3 style="text-align: center;">Regresión Lineal Multivariable</h3>
+                <p style="font-size: 0.95rem; text-align: justify;">
+                  Modelo baseline que asume relaciones lineales entre las
+                  variables predictoras y la concentración de gas. Útil como
+                  referencia pero limitado ante no linealidades físicas.
+                </p>
+              </div>
+              <div class="col-4 col-12-medium">
+                <div style="text-align: center; margin-bottom: 1rem;">
+                  <img
+                    src="../images/ml-sensors/logo_poly_reg.png"
+                    alt="Regresión Polinomial"
+                    style="width: 90px; height: auto; opacity: 0.9;"
+                  />
+                </div>
+                <h3 style="text-align: center;">Regresión Polinomial</h3>
+                <p style="font-size: 0.95rem; text-align: justify;">
+                  Extiende el modelo lineal incorporando términos cuadráticos e
+                  interacciones entre variables predictoras, capturando no
+                  linealidades moderadas del sistema.
+                </p>
+              </div>
+              <div class="col-4 col-12-medium">
+                <div style="text-align: center; margin-bottom: 1rem;">
+                  <img
+                    src="../images/ml-sensors/logo_nn.png"
+                    alt="Perceptrón Multicapa"
+                    style="width: 90px; height: auto; opacity: 0.9;"
+                  />
+                </div>
+                <h3 style="text-align: center;">Perceptrón Multicapa</h3>
+                <p style="font-size: 0.95rem; text-align: justify;">
+                  Red neuronal artificial capaz de modelar interacciones
+                  complejas entre las variables predictoras y la concentración
+                  de gas.
+                </p>
+              </div>
+            </div>
+
+            <h3 id="code">Ejemplo de Implementación</h3>
+            <div style="margin-top: 1.5rem;">
+<pre><code class="python">from sklearn.linear_model import LinearRegression
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.pipeline import make_pipeline
+from sklearn.neural_network import MLPRegressor
+
+# MODELO 1: Regresión lineal
+f_lineal = LinearRegression()
+
+# MODELO 2: Regresión polinomial (grado 2)
+f_polinomial = make_pipeline(PolynomialFeatures(degree=2), LinearRegression())
+
+# MODELO 3: Red neuronal (MLP)
+f_mlp = MLPRegressor()
+
+# Entrenamiento — split 80/20 aplicado previamente
+f_lineal.fit(X_train, y_train)
+f_polinomial.fit(X_train, y_train)
+f_mlp.fit(X_train, y_train)</code></pre>
+            </div>
+          </section>
+
+          <hr />
+
+          <!-- ═══════════ VALIDACIÓN ═══════════ -->
+          <section id="validation">
+            <h2>Resultados y Validación</h2>
+            <p>
+              En el siguiente video puede ver una animación del proceso de
+              entrenamiento de una regresión lineal y cómo esta función de
+              transferencia permite la convergencia de la respuesta del sensor a
+              la respuesta del instrumento de referencia.
+            </p>
+
+            <!-- VIDEO: ajuste del modelo de regresión lineal -->
+            <div style="text-align: center; margin: 2rem 0;">
+              <video
+                controls
+                style="max-width: 80%; height: auto;"
+                aria-label="Video explicativo del ajuste del modelo de regresión lineal"
+              >
+                <source src="../images/ml-sensors/video.mp4" type="video/mp4" />
+                Tu navegador no soporta la reproducción de video.
+              </video>
+            </div>
+
+            <!-- IMAGEN: comparativa de series de tiempo de los 3 modelos -->
+            <p>
+              Este procedimiento se aplicó para los 3 modelos. A continuación
+              puede ver las series de tiempo de la concentración de
+              NO<sub>2</sub> y sus respectivos porcentajes de sesgo.
+            </p>
+            <div style="text-align: center; margin: 2rem 0;">
+              <img
+                src="../images/ml-sensors/time_series.png"
+                alt="Comparativa de series de tiempo: regresión lineal, polinomial y MLP vs referencia SINCA"
+                style="max-width: 80%; height: auto;"
+              />
+            </div>
+
+            <div class="table-wrapper">
+              <table class="alt">
+                <thead>
+                  <tr>
+                    <th>Modelo Evaluado</th>
+                    <th>RMSE (ppb)</th>
+                    <th>R<sup>2</sup> Score</th>
+                    <th>Sesgo (BIAS)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Regresión Lineal Multivariable</td>
+                    <td>5.34</td>
+                    <td>0.78</td>
+                    <td>16.83 %</td>
+                  </tr>
+                  <tr>
+                    <td>Regresión Polinomial (2° Orden)</td>
+                    <td>4.12</td>
+                    <td>0.84</td>
+                    <td>14.21 %</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Red Neuronal Artificial (MLP 5x6)</strong></td>
+                    <td><strong>3.05</strong></td>
+                    <td><strong>0.91</strong></td>
+                    <td><strong>13.35 %</strong></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <p>
+              Los resultados indican que la
+              <strong>Red Neuronal Artificial MLP (5x6)</strong>
+              es el modelo de mejor desempeño, alcanzando un R² de 0.91 y un
+              sesgo del 13.35 %, cumpliendo con el criterio de rendimiento
+              óptimo establecido por la EPA. Su capacidad para capturar las no
+              linealidades físicas del sistema la posiciona como la función de
+              calibración definitiva para el despliegue operativo de la red de
+              sensores.
+            </p>
+          </section>
+
+          <hr />
+
+          <!-- ═══════════ TEMPORAL ═══════════ -->
+          <section id="temporal">
+            <h2>Análisis Temporal y Calibración de Dos Etapas</h2>
+            <p>
+              Uno de los aportes cruciales del estudio de datos consistió en
+              evaluar cómo responde el modelo ante las ventanas de tiempo de
+              entrenamiento, resolviendo dos preguntas operativas críticas:
+            </p>
+            <div class="row">
+              <div class="col-6 col-12-medium">
+                <h3>Ventana Mínima de Co-localización</h3>
+                <p>
+                  A través de experimentos de partición temporal decreciente, se
+                  determinó que el regresor neuronal requiere un
+                  <strong>mínimo de 12 días continuos de datos de entrenamiento</strong>
+                  junto a una estación de referencia patrón para estabilizar las
+                  matrices de pesos y garantizar que las predicciones futuras
+                  mantengan un sesgo menor al 20 %.
+                </p>
+                <div style="text-align: center; margin: 1.5rem 0;">
+                  <img
+                    src="../images/ml-sensors/temporal_BIAS.png"
+                    alt="Gráfico de sesgo vs ventana temporal de entrenamiento"
+                    style="max-width: 100%; height: auto;"
+                  />
+                </div>
+              </div>
+              <div class="col-6 col-12-medium">
+                <h3>Compensación Dinámica de la Deriva</h3>
+                <p>
+                  La celda electroquímica del sensor sufre un desgaste físico
+                  irreversible que se traduce en un sesgo creciente (deriva
+                  temporal). Para mitigar este desgaste sin necesidad de
+                  recalibrar físicamente en terreno, se integró una función de
+                  corrección ponderada en el tiempo que estabiliza el error
+                  acumulado a largo plazo con un sesgo del <strong>10.86 %</strong>.
+                </p>
+                <div style="text-align: center; margin: 1.5rem 0;">
+                  <img
+                    src="../images/ml-sensors/doble_calibracion.png"
+                    alt="Gráfico de deriva temporal y corrección ponderada del sesgo acumulado"
+                    style="max-width: 100%; height: auto;"
+                  />
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <hr />
+
+          <!-- ═══════════ INSIGHTS ═══════════ -->
+          <section id="insights">
+            <h2>Insights Científicos y Conclusiones Analíticas</h2>
+            <p>
+              El análisis exploratorio avanzado y la inspección
+              post-entrenamiento del modelo arrojaron los siguientes
+              descubrimientos clave:
+            </p>
+            <div class="row">
+              <div class="col-6 col-12-medium">
+                <ul>
+                  <li>
+                    <strong>Sensibilidad Térmica Dominante:</strong> La
+                    temperatura ambiente actúa como el principal interferente
+                    del sistema electroquímico, siendo la variable de mayor peso
+                    en las matrices del modelo neuronal entrenado.
+                  </li>
+                  <li>
+                    <strong>Transferibilidad del Modelo:</strong> Se probó con
+                    éxito la transferencia de pesos entre sensores distribuidos
+                    geográficamente, permitiendo que un sensor calibrado en un
+                    punto actúe como calibrador secundario de otro.
+                  </li>
+                </ul>
+              </div>
+              <div class="col-6 col-12-medium">
+                <ul>
+                  <li>
+                    <strong>Análisis Temporal:</strong> Se determinó que 12 días
+                    de entrenamiento (aproximadamente 2 semanas en modo
+                    co-localización) son suficientes para lograr convergencia
+                    estable. Adicionalmente, la calibración de dos etapas con
+                    corrección temporal reduce la deriva a largo plazo hasta un
+                    sesgo del 10.86 %.
+                  </li>
+                  <li>
+                    <strong>Cierre de Brecha Económica:</strong> La calibración
+                    inteligente reduce el sesgo de medición desde un 30 % hasta
+                    un 10 %, logrando una mejora de precisión del 20 % sobre
+                    hardware de bajísimo costo y habilitando la viabilidad
+                    técnica de redes densas de alta resolución espacial.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <hr />
+
+          <!-- ═══════════ GALERÍA ═══════════ -->
+          <section id="gallery">
+            <h2>Galería del Proyecto</h2>
+            <div class="gallery-scroll">
+              <img src="../images/ml-sensors/gallery/foto_celda.jpg" alt="Celda electroquímica del sensor" />
+              <img src="../images/ml-sensors/gallery/esquema celda.jpg" alt="Esquema de la celda" />
+              <img src="../images/ml-sensors/gallery/logo_airflux.jpg" alt="Logo Airflux" />
+              <img src="../images/ml-sensors/gallery/time_series.png" alt="Series de tiempo" />
+              <img src="../images/ml-sensors/gallery/foto-nodo-A.png" alt="Nodo de monitoreo A" />
+              <img src="../images/ml-sensors/gallery/foto-nodo-sensores.jpeg" alt="Nodo de sensores" />
+              <img src="../images/ml-sensors/gallery/foto-analizador.jpeg" alt="Analizador de referencia" />
+              <img src="../images/ml-sensors/gallery/sensor.jpg" alt="Sensor electroquímico" />
+              <img src="../images/ml-sensors/gallery/perceptron_multicapa.png" alt="Arquitectura MLP" />
+              <img src="../images/ml-sensors/gallery/temp_residuals.png" alt="Residuos de temperatura" />
+              <img src="../images/ml-sensors/gallery/mapa.png" alt="Mapa de despliegue de sensores" />
+            </div>
+          </section>
+
+          <hr />
+
+          <!-- ═══════════ STACK ═══════════ -->
+          <section id="stack">
+            <h2>Stack Tecnológico de Ciencia de Datos</h2>
+            <p>
+              Todo el ecosistema de procesamiento de señales, análisis
+              estadísticos, entrenamiento y validación de modelos de ML fue
+              construido empleando herramientas robustas del ecosistema de
+              Python:
+            </p>
+            <div class="row">
+              <div class="col-6 col-12-medium">
+                <ul>
+                  <li>
+                    <strong>Python 3.10 & NumPy:</strong> Base del entorno de
+                    cómputo científico y manejo eficiente de álgebra matricial.
+                  </li>
+                  <li>
+                    <strong>Scikit-Learn:</strong> Framework principal utilizado
+                    para la construcción de pipelines de preprocesamiento,
+                    particionamiento de datos, escalamiento e instanciación de
+                    la arquitectura de Red Neuronal MLP, entrenamiento y
+                    validación.
+                  </li>
+                  <li>
+                    <strong>Pandas:</strong> Motor analítico de series de tiempo
+                    horarias, encargado de la limpieza y alineación estricta de
+                    las marcas temporales de los sensores remotos con las
+                    estaciones SINCA.
+                  </li>
+                </ul>
+              </div>
+              <div class="col-6 col-12-medium">
+                <ul>
+                  <li>
+                    <strong>Matplotlib & Seaborn:</strong> Módulos de
+                    visualización avanzados que permitieron estructurar los
+                    gráficos analíticos del EDA, matrices de correlación y
+                    curvas de ajuste de residuos.
+                  </li>
+                  <li>
+                    <strong>Ecosistema Industrial:</strong> Integración de
+                    flujos conceptuales validados con datos operativos reales de
+                    la empresa de monitoreo inteligente Airflux y con soporte
+                    del centro de investigación CEDENNA.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <section style="margin-top: 3rem; text-align: center;">
+            <ul class="actions special">
+              <li>
+                <a href="../index.html#projects" class="button primary"
+                  >Volver al Portafolio</a
+                >
+              </li>
+            </ul>
+          </section>
+
+        </div>
+      </div>
+
+      <footer id="footer">
+        <div class="inner">
+          <ul class="copyright">
+            <li>&copy; Omar Fernández</li>
+            <li>Portafolio de Proyectos</li>
+          </ul>
+        </div>
+      </footer>
+    </div>
+
+    <script src="../assets/js/jquery.min.js"></script>
+    <script src="../assets/js/browser.min.js"></script>
+    <script src="../assets/js/breakpoints.min.js"></script>
+    <script src="../assets/js/util.js"></script>
+    <script src="../assets/js/main.js"></script>
+  </body>
+</html>
