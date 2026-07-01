@@ -1,0 +1,748 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Predicción Espacial de Calidad del Aire | Omar Fernández</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, user-scalable=no"
+    />
+
+    <link rel="stylesheet" href="../assets/css/main.css" />
+
+    <noscript>
+      <link rel="stylesheet" href="../assets/css/noscript.css" />
+    </noscript>
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css"
+    />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+    <script>
+      hljs.highlightAll();
+    </script>
+
+    <script>
+      MathJax = {
+        tex: { inlineMath: [["$", "$"]] },
+        svg: { fontCache: "global" },
+      };
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+  </head>
+
+  <body class="is-preload">
+    <div id="wrapper">
+      <!-- Header -->
+      <header id="header">
+        <div class="inner">
+          <a href="../index.html" class="logo">
+            <span class="symbol">
+              <img
+                src="../images/kriging/icono.png"
+                alt="Spatial Analytics Icon"
+              />
+            </span>
+
+            <span class="title"> Omar Fernández | Portafolio </span>
+          </a>
+
+          <nav>
+            <ul>
+              <li><a href="#menu">Menú</a></li>
+            </ul>
+          </nav>
+        </div>
+      </header>
+
+      <!-- Menu -->
+      <nav id="menu">
+        <h2>Estructura del Proyecto</h2>
+
+        <ul>
+          <li><a href="../index.html">Inicio</a></li>
+
+          <li><a href="#problem"> El Problema </a></li>
+
+          <li><a href="#solution"> Estrategia de Solución </a></li>
+
+          <li><a href="#kriging"> ¿Por qué Kriging? </a></li>
+
+          <li><a href="#pipeline"> Arquitectura del Pipeline </a></li>
+
+          <li><a href="#results"> Resultados </a></li>
+
+          <li><a href="#streamlit"> Aplicación Interactiva </a></li>
+
+          <li><a href="#stack"> Stack Tecnológico </a></li>
+
+          <li><a href="#conclusion"> Conclusiones </a></li>
+        </ul>
+      </nav>
+
+      <!-- Main -->
+      <div id="main">
+        <div class="inner">
+          <!-- ====================================================== -->
+          <!-- HERO -->
+          <!-- ====================================================== -->
+
+          <section id="hero" style="text-align: center">
+            <h2>
+              Predicción Espacial de Calidad del Aire mediante Interpolación Geoestadística
+            </h2>
+
+            <p
+              style="
+                font-size: 1.2rem;
+                max-width: 850px;
+                margin: 0 auto 20px auto;
+              "
+            >
+              Desarrollo de un esquema de interpolación espacial y temporal
+              capaz de transformar mediciones discretas provenientes de sensores
+              ambientales en mapas continuos de contaminación, utilizando
+              <strong>Kriging Ordinario</strong> para la estimación espacial y
+              <strong>Cubic Splines</strong> para modelar la evolución temporal
+              del fenómeno.
+            </p>
+
+            <p>
+              <strong>Data Scientist & Geospatial Analyst</strong>
+
+              <br />
+
+              Desarrollo de Algoritmos Geoestadísticos · Airflux
+            </p>
+
+            <ul class="actions special">
+              <li>
+                <a
+                  href="https://air-quality-dashboard-b2f8kwb2jfywnyfkccqrwb.streamlit.app/"
+                  target="_blank"
+                  class="button primary icon brands fa-python"
+                >
+                  Explorar Aplicación Interactiva
+                </a>
+              </li>
+
+              <li>
+                <a href="../index.html" class="button">
+                  Volver al Portafolio
+                </a>
+              </li>
+            </ul>
+
+            <figure
+              style="margin-top: 3rem; margin-bottom: 3rem; text-align: center"
+            >
+              <span class="image fit" style="margin: 0">
+                <img
+                  src="../images/kriging/portada.png"
+                  alt="Mapa continuo generado mediante interpolación geoestadística"
+                />
+              </span>
+
+              <figcaption
+                style="
+                  font-style: italic;
+                  font-size: 0.9rem;
+                  color: #777;
+                  margin-top: 0.75rem;
+                "
+              >
+                Desde estaciones dispersas hasta un mapa continuo: el sistema
+                transforma mediciones puntuales en una representación completa
+                del contaminante. A partir de una grid de interpolación (puntos
+                rojos), se estiman y predicen valores en el dominio espacial,
+                los cuales luego son reconstruidos para generar una
+                visualización continua del contaminante.
+              </figcaption>
+            </figure>
+          </section>
+
+          <hr />
+
+          <!-- ====================================================== -->
+          <!-- PROBLEMA -->
+          <!-- ====================================================== -->
+
+          <section id="problem">
+            <h2>El Problema</h2>
+
+            <div class="row">
+              <div class="col-12">
+                <p>
+                  Las redes de monitoreo ambiental se componen de un número
+                  limitado de estaciones capaces de medir la concentración de
+                  contaminantes en ubicaciones específicas. Aunque estos
+                  sensores entregan información de alta calidad, cada medición
+                  representa únicamente un
+                  <strong>punto discreto del territorio</strong>, dejando
+                  grandes áreas sin observaciones directas.
+                </p>
+
+                <p>
+                  Sin embargo, la contaminación atmosférica es un fenómeno
+                  <strong>continuo en el espacio y dinámico en el tiempo</strong
+                  >. En la práctica, muchas estaciones reportan datos en
+                  ventanas de muestreo amplias —frecuentemente de una hora—, lo
+                  que implica una baja densidad temporal de observaciones. Esta
+                  resolución limita la capacidad de representar adecuadamente la
+                  evolución del fenómeno, especialmente cuando se busca analizar
+                  cambios progresivos de las masas de aire contaminada.
+                </p>
+
+                <p>
+                  Frente a estas limitaciones, el desafío consiste en abordar de
+                  manera conjunta las dimensiones
+                  <strong>espacial y temporal</strong> del fenómeno. En el
+                  dominio espacial, se busca estimar valores en zonas no
+                  observadas a partir de mediciones dispersas; mientras que en
+                  el dominio temporal, el objetivo es
+                  <strong>densificar la información</strong> para construir
+                  representaciones más continuas y fluidas del comportamiento
+                  del contaminante.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <hr />
+
+          <!-- ====================================================== -->
+          <!-- SOLUCIÓN -->
+          <!-- ====================================================== -->
+
+          <section id="solution">
+            <h2>La Estrategia de Solución</h2>
+
+            <p>
+              Para abordar este problema fue necesario separar el fenómeno en
+              sus dos componentes fundamentales: su comportamiento en el
+              <strong>espacio</strong> y su evolución en el
+              <strong>tiempo</strong>. En lugar de utilizar un único algoritmo
+              para resolver ambas dimensiones, se diseñó un motor compuesto por
+              dos etapas complementarias, donde cada una modela una
+              característica específica del fenómeno físico.
+            </p>
+
+            <div class="row">
+              <!-- ====================================================== -->
+              <!-- ESPACIAL -->
+              <!-- ====================================================== -->
+
+              <div class="col-6 col-12-medium">
+                <h3>1. Reconstrucción Espacial mediante Kriging</h3>
+
+                <p>
+                  La primera etapa estima la concentración del contaminante en
+                  aquellas regiones donde no existen sensores mediante el modelo
+                  de
+                  <strong>Kriging Ordinario</strong>, una técnica geoestadística
+                  que aprovecha la autocorrelación espacial presente en las
+                  mediciones para reconstruir una superficie continua a partir
+                  de observaciones discretas.
+                </p>
+
+                <p>
+                  Dado que Kriging es un método geoestadístico y no
+                  determinista, permite estimar tanto la concentración más
+                  probable como la incertidumbre asociada a cada predicción. El
+                  resultado es un mapa probabilístico que describe el fenómeno
+                  junto con su nivel de confianza en cada punto del dominio.
+                </p>
+
+                <span class="image fit" style="margin-top: 1.5rem">
+                  <img
+                    src="../images/kriging/surfaces.png"
+                    alt="Interpolación espacial mediante Kriging"
+                  />
+                </span>
+              </div>
+
+              <!-- ====================================================== -->
+              <!-- TEMPORAL -->
+              <!-- ====================================================== -->
+
+              <div class="col-6 col-12-medium">
+                <h3>2. Reconstrucción Temporal mediante Cubic Splines</h3>
+                <p>
+                  Una vez obtenidos los mapas espaciales para cada instante de
+                  medición, el segundo desafío consistió en representar la
+                  evolución del contaminante entre observaciones consecutivas.
+                  Dado que los sensores registran datos en ventanas horarias, la
+                  dinámica del fenómeno queda muestreada con una resolución
+                  temporal relativamente gruesa, limitando el análisis de su
+                  evolución continua.
+                </p>
+
+                <p>
+                  Para abordar esto, se implementó una interpolación temporal
+                  mediante
+                  <strong>Cubic Splines</strong>, permitiendo densificar la
+                  serie temporal y generar estados intermedios entre mediciones.
+                  Esto hace posible analizar el fenómeno en escalas más finas
+                  —como resoluciones de 5 o 15 minutos—, produciendo
+                  transiciones suaves y visualizaciones continuas del
+                  desplazamiento de las masas de aire, facilitando su
+                  interpretación dinámica.
+                </p>
+
+                <span class="image fit" style="margin-top: 1.5rem">
+                  <img
+                    src="../images/kriging/spline_anim.gif"
+                    alt="Interpolación temporal mediante Cubic Splines"
+                  />
+                </span>
+              </div>
+            </div>
+          </section>
+
+          <hr />
+
+          <!-- ====================================================== -->
+          <!-- KRIGING -->
+          <!-- ====================================================== -->
+
+          <section id="kriging">
+            <h2>¿Por qué Kriging?</h2>
+
+            <p>
+              Existen numerosos métodos capaces de interpolar información
+              espacial, como la interpolación por distancia inversa (IDW),
+              vecinos más cercanos o superficies suavizadas mediante Splines.
+              Sin embargo, estos enfoques estiman valores utilizando únicamente
+              relaciones geométricas entre los puntos, sin considerar
+              explícitamente el comportamiento estadístico del fenómeno que se
+              desea modelar.
+            </p>
+
+            <p>
+              En este proyecto se optó por implementar
+              <strong>Kriging Ordinario</strong> debido a que la concentración
+              de un contaminante atmosférico presenta una fuerte
+              <strong>autocorrelación espacial</strong>: dos mediciones cercanas
+              tienden a ser más similares que dos mediciones alejadas. Kriging
+              incorpora esta propiedad directamente en el modelo, utilizando un
+              <strong>semivariograma</strong> para describir cómo cambia la
+              similitud entre las observaciones a medida que aumenta la
+              distancia entre ellas.
+            </p>
+
+            <p>
+              Esta característica representa una ventaja importante respecto a
+              otros métodos de interpolación. En lugar de calcular únicamente
+              una superficie continua, Kriging determina los pesos óptimos de
+              cada sensor resolviendo un problema de optimización que minimiza
+              la varianza del error bajo la restricción de mantener estimaciones
+              insesgadas. Como resultado, cada predicción se encuentra
+              respaldada por un modelo estadístico de la dependencia espacial
+              observada en los datos.
+            </p>
+
+            <div style="text-align: center; margin: 2.5rem 0">
+              <p style="font-size: 1.6rem; margin: 0">
+                $$\hat{Z}(\vec{x})=\sum_{i=1}^{n}\lambda_i\,Z(\vec{x}_i)$$
+              </p>
+            </div>
+
+            <p>
+              En la expresión anterior, $\hat{Z}(\vec{x})$ representa la
+              concentración estimada en una ubicación $\vec{x}=(x, y)$ donde no
+              existen mediciones directas, mientras que $Z(\vec{x}_i)$
+              corresponde a las observaciones registradas por los sensores en
+              los puntos $\vec{x}_i = (x_i, y_i)$. Los pesos $\lambda_i$ no
+              dependen únicamente de la distancia entre puntos, sino del modelo
+              de autocorrelación descrito por el semivariograma, permitiendo que
+              cada estimación refleje el comportamiento espacial real del
+              fenómeno.
+            </p>
+          </section>
+
+          <hr />
+
+          <!-- ====================================================== -->
+          <!-- PIPELINE -->
+          <!-- ====================================================== -->
+
+          <section id="pipeline">
+            <h2>Arquitectura del Motor de Interpolación</h2>
+
+            <p>
+              Una vez definida la estrategia de modelamiento, el siguiente paso
+              fue implementar un pipeline capaz de transformar las mediciones
+              entregadas por la red de sensores en mapas continuos de
+              contaminación. El proceso combina la interpolación espacial
+              mediante Kriging con un modelo de interpolación temporal,
+              permitiendo reconstruir tanto la distribución espacial como la
+              evolución dinámica del fenómeno.
+            </p>
+
+            <p>
+              A nivel computacional, el flujo de procesamiento se estructura en
+              cuatro etapas principales: preparación de los datos, estimación
+              espacial, interpolación temporal y generación de las superficies
+              finales para su visualización.
+            </p>
+
+            <pre><code class="python">
+import numpy as np
+from pykrige.ok import OrdinaryKriging
+from scipy.interpolate import CubicSpline
+
+# ==========================================================
+# 1. Lectura de datos provenientes de la red de sensores
+# ==========================================================
+
+x_coords = ...
+y_coords = ...
+data_values = ...
+
+# ==========================================================
+# 2. Interpolación espacial mediante Kriging
+# ==========================================================
+
+OK = OrdinaryKriging(
+    x_coords,
+    y_coords,
+    data_values,
+    variogram_model="spherical",
+    verbose=False,
+    enable_plotting=False
+)
+
+grid_z, grid_variance = OK.execute(
+    "grid",
+    grid_x,
+    grid_y
+)
+
+# grid_z        -> concentración estimada
+# grid_variance -> incertidumbre de la estimación
+
+# ==========================================================
+# 3. Interpolación temporal mediante Cubic Splines
+# ==========================================================
+
+cs = CubicSpline(
+    t_obs,
+    z_series,
+    axis=0
+)
+
+t_dense = np.linspace(
+    t_obs.min(),
+    t_obs.max(),
+    500
+)
+
+z_smooth = cs(t_dense)
+
+# ==========================================================
+# 4. Visualización del campo continuo
+# ==========================================================
+
+# Cada superficie interpolada se utiliza para generar
+# mapas y animaciones del comportamiento del contaminante.
+
+</code></pre>
+
+            <p>
+              Esta arquitectura desacopla completamente la estimación espacial
+              de la evolución temporal, permitiendo reemplazar cualquiera de
+              ambos modelos sin modificar el resto del pipeline. Como resultado,
+              el motor puede adaptarse fácilmente a otros fenómenos
+              geoespaciales donde existan mediciones discretas distribuidas
+              sobre un territorio.
+            </p>
+          </section>
+
+          <hr />
+
+          <!-- ====================================================== -->
+          <!-- RESULTADOS -->
+          <!-- ====================================================== -->
+
+          <section id="results">
+            <h2>Resultados Obtenidos</h2>
+
+            <p>
+              El sistema fue evaluado en distintos escenarios reales y
+              experimentales, demostrando su capacidad para reconstruir campos
+              de contaminación a partir de redes de monitoreo dispersas y datos
+              de distinta resolución espacial y temporal.
+            </p>
+
+            <div class="row">
+              <!-- ====================================================== -->
+              <!-- CASO 1 -->
+              <!-- ====================================================== -->
+
+              <div class="col-4 col-12-medium">
+                <h3>Caso 1: PM2.5 en la Región Metropolitana</h3>
+
+                <p>
+                  Estimación espacial de PM2.5 a partir de la red de estaciones
+                  de monitoreo. El modelo reconstruye superficies continuas que
+                  permiten identificar gradientes urbanos asociados a emisiones
+                  y procesos de dispersión atmosférica. Las áreas sin
+                  representación del heatmap no deben interpretarse como zonas
+                  necesariamente limpias, sino como regiones donde la
+                  incertidumbre del modelo es elevada y, por tanto, la
+                  confiabilidad de la estimación es menor. En contraste, las
+                  zonas representadas en tonos verdes corresponden a sectores
+                  con aire más limpio.
+                </p>
+
+                <span class="image fit">
+                  <img
+                    src="../images/kriging/kriging_ponderado.png"
+                    alt="Caso Ozono RM"
+                  />
+                </span>
+              </div>
+
+              <!-- ====================================================== -->
+              <!-- CASO 2 -->
+              <!-- ====================================================== -->
+
+              <div class="col-4 col-12-medium">
+                <h3>Caso 2: Mediciones con drones</h3>
+                <p>
+                  Integración de mediciones de alta resolución espacial
+                  obtenidas mediante drones, donde cada observación alimenta el
+                  modelo durante el sobrevuelo de la región. Esto permite
+                  identificar <strong>hotspots de contaminación</strong> y
+                  analizar su evolución intra-diaria, comparando mediciones en
+                  un mismo punto durante la mañana y la tarde.
+                </p>
+
+                <span class="image fit">
+                  <img
+                    src="../images/kriging/dron.png"
+                    alt="Caso PM2.5 drones"
+                  />
+                </span>
+              </div>
+
+              <!-- ====================================================== -->
+              <!-- CASO 3 -->
+              <!-- ====================================================== -->
+
+              <div class="col-4 col-12-medium">
+                <h3>Caso 3: Incendios forestales</h3>
+
+                <p>
+                  Reconstrucción espacio-temporal de PM2.5 en la Región
+                  Metropolitana durante los incendios forestales ocurridos en
+                  diciembre de 2022, caracterizados por alta dinámica y
+                  variabilidad tanto espacial como temporal del contaminante.
+                </p>
+                <span class="image fit">
+                  <video controls style="width: 100%; border-radius: 6px">
+                    <source
+                      src="../images/kriging/incendio.mp4"
+                      type="video/mp4"
+                    />
+                    Tu navegador no soporta el video.
+                  </video>
+                </span>
+              </div>
+            </div>
+          </section>
+
+          <hr />
+
+          <!-- ====================================================== -->
+          <!-- STREAMLIT -->
+          <!-- ====================================================== -->
+
+          <section
+            id="streamlit"
+            style="
+              text-align: center;
+              background-color: rgba(0, 0, 0, 0.02);
+              padding: 3rem;
+              border-radius: 8px;
+            "
+          >
+            <h2>Aplicación Interactiva</h2>
+
+            <p style="max-width: 900px; margin: 0 auto 1.5rem auto">
+              Para llevar este motor de interpolación a un entorno operativo y
+              exploratorio, se desarrolló una aplicación interactiva en
+              <strong>Streamlit</strong> que permite consultar datos reales de
+              la red de monitoreo <strong>SINCA</strong> mediante su API
+              pública, y aplicar en tiempo real el modelo de
+              <strong>Kriging Ordinario</strong>
+              sobre las estaciones seleccionadas.
+            </p>
+
+            <p style="max-width: 900px; margin: 0 auto 1.5rem auto">
+              El usuario puede seleccionar contaminantes, elegir rangos
+              temporales y visualizar cómo el sistema reconstruye el campo
+              espacial de concentración a partir de mediciones discretas
+              obtenidas directamente desde la red oficial de monitoreo
+              ambiental.
+            </p>
+
+            <p style="max-width: 900px; margin: 0 auto 2rem auto">
+              La aplicación realiza una consulta dinámica a la API de SINCA,
+              procesa los datos de estaciones en tiempo real, y ejecuta el
+              pipeline de interpolación espacial, generando mapas continuos de
+              concentración junto con su incertidumbre asociada. El resultado se
+              visualiza de forma interactiva, facilitando el análisis
+              exploratorio del comportamiento de los contaminantes en la Región
+              Metropolitana.
+            </p>
+
+            <ul class="actions special">
+              <li>
+                <a
+                  href="https://air-quality-dashboard-b2f8kwb2jfywnyfkccqrwb.streamlit.app/"
+                  target="_blank"
+                  class="button primary large icon solid fa-external-link-alt"
+                >
+                  Abrir Aplicación Streamlit
+                </a>
+              </li>
+            </ul>
+          </section>
+          <hr />
+
+          <!-- ====================================================== -->
+          <!-- STACK -->
+          <!-- ====================================================== -->
+
+          <section id="stack">
+            <h2>Stack Tecnológico</h2>
+
+            <div class="row">
+              <div class="col-6 col-12-medium">
+                <h3>Librerías Científicas</h3>
+
+                <ul>
+                  <li>
+                    <strong>NumPy</strong>: manipulación eficiente de datos
+                    numéricos y estructuras espaciales.
+                  </li>
+                  <li>
+                    <strong>SciPy</strong>: interpolación temporal mediante
+                    Cubic Splines y herramientas de optimización.
+                  </li>
+                  <li>
+                    <strong>PyKrige</strong>: implementación de Kriging
+                    Ordinario para interpolación geoestadística.
+                  </li>
+                  <li>
+                    <strong>Pandas</strong>: procesamiento y estructuración de
+                    datos provenientes de la API SINCA.
+                  </li>
+                </ul>
+              </div>
+
+              <div class="col-6 col-12-medium">
+                <h3>Herramientas y Plataforma</h3>
+
+                <ul>
+                  <li>
+                    <strong>Streamlit</strong>: desarrollo de aplicación
+                    interactiva para exploración del modelo en tiempo real.
+                  </li>
+                  <li>
+                    <strong>API SINCA</strong>: fuente oficial de datos de
+                    calidad del aire en la Región Metropolitana.
+                  </li>
+                  <li>
+                    <strong>Matplotlib / Plotly</strong>: visualización de
+                    superficies espaciales e incertidumbre del modelo.
+                  </li>
+                  <li>
+                    <strong>Python</strong>: lenguaje base para todo el pipeline
+                    de modelamiento y despliegue.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <hr />
+
+          <!-- ====================================================== -->
+          <!-- CONCLUSIÓN -->
+          <!-- ====================================================== -->
+
+          <section id="conclusion">
+            <h2>Conclusiones</h2>
+
+            <p>
+              Este proyecto demuestra cómo la combinación de técnicas
+              geoestadísticas y métodos de interpolación temporal permite
+              transformar datos ambientales discretos en representaciones
+              continuas de alta fidelidad. La integración de
+              <strong>Kriging Ordinario</strong> con modelos de suavizado
+              temporal entrega una visión coherente tanto del estado espacial
+              como de la dinámica del contaminante.
+            </p>
+
+            <p>
+              Uno de los principales aportes del sistema es la incorporación
+              explícita de la incertidumbre en las predicciones espaciales, lo
+              que permite no solo estimar concentraciones, sino también
+              identificar zonas donde la red de monitoreo presenta baja
+              cobertura o alta variabilidad espacial.
+            </p>
+
+            <p>
+              La implementación en una aplicación interactiva basada en
+              Streamlit y datos en tiempo real de la API SINCA valida el enfoque
+              en escenarios reales, demostrando su potencial como herramienta de
+              análisis exploratorio para calidad del aire y planificación
+              ambiental.
+            </p>
+
+            <p>
+              En conjunto, el motor desarrollado no solo funciona como una
+              solución de visualización avanzada, sino como una base extensible
+              para futuros sistemas de monitoreo inteligente, predicción
+              ambiental y soporte a la toma de decisiones en contextos urbanos.
+            </p>
+          </section>
+
+          <section style="margin-top: 3rem; text-align: center">
+            <ul class="actions special">
+              <li>
+                <a href="../index.html#projects" class="button primary">
+                  Volver al Portafolio
+                </a>
+              </li>
+            </ul>
+          </section>
+        </div>
+      </div>
+
+      <!-- Footer -->
+
+      <footer id="footer">
+        <div class="inner">
+          <ul class="copyright">
+            <li>&copy; Omar Fernández</li>
+
+            <li>Portafolio de Proyectos</li>
+          </ul>
+        </div>
+      </footer>
+    </div>
+
+    <script src="../assets/js/jquery.min.js"></script>
+    <script src="../assets/js/browser.min.js"></script>
+    <script src="../assets/js/breakpoints.min.js"></script>
+    <script src="../assets/js/util.js"></script>
+    <script src="../assets/js/main.js"></script>
+  </body>
+</html>
