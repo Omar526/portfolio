@@ -1,8 +1,10 @@
 <!doctype html>
 <html>
   <head>
-    <title>Predicción Espacial de Calidad del Aire | Omar Fernández</title>
+    <title>Pronóstico Temporal de PM2.5 con LSTM | Omar Fernández</title>
+
     <meta charset="utf-8" />
+
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1, user-scalable=no"
@@ -27,8 +29,12 @@
 
     <script>
       MathJax = {
-        tex: { inlineMath: [["$", "$"]] },
-        svg: { fontCache: "global" },
+        tex: {
+          inlineMath: [["$", "$"]],
+        },
+        svg: {
+          fontCache: "global",
+        },
       };
     </script>
 
@@ -37,13 +43,16 @@
 
   <body class="is-preload">
     <div id="wrapper">
+      <!-- ====================================================== -->
       <!-- Header -->
+      <!-- ====================================================== -->
+
       <header id="header">
         <div class="inner">
           <a href="../index.html" class="logo">
             <span class="symbol">
               <img
-                src="../images/kriging/icono.png"
+                src="../images/lstm/logo_pm25.png"
                 alt="Spatial Analytics Icon"
               />
             </span>
@@ -53,38 +62,44 @@
 
           <nav>
             <ul>
-              <li><a href="#menu">Menú</a></li>
+              <li>
+                <a href="#menu">Menú</a>
+              </li>
             </ul>
           </nav>
         </div>
       </header>
 
-      <!-- Menu -->
+      <!-- ====================================================== -->
+      <!-- Menú -->
+      <!-- ====================================================== -->
+
       <nav id="menu">
         <h2>Estructura del Proyecto</h2>
 
         <ul>
           <li><a href="../index.html">Inicio</a></li>
 
-          <li><a href="#problem"> El Problema </a></li>
+          <li><a href="#context">El Problema</a></li>
 
-          <li><a href="#solution"> Estrategia de Solución </a></li>
+          <li><a href="#data">Conjunto de Datos</a></li>
 
-          <li><a href="#kriging"> ¿Por qué Kriging? </a></li>
+          <li><a href="#eda">Análisis Exploratorio</a></li>
 
-          <li><a href="#pipeline"> Arquitectura del Pipeline </a></li>
+          <li><a href="#models">Modelos LSTM</a></li>
 
-          <li><a href="#results"> Resultados </a></li>
+          <li><a href="#results">Resultados</a></li>
 
-          <li><a href="#streamlit"> Aplicación Interactiva </a></li>
+          <li><a href="#stack">Stack Tecnológico</a></li>
 
-          <li><a href="#stack"> Stack Tecnológico </a></li>
-
-          <li><a href="#conclusion"> Conclusiones </a></li>
+          <li><a href="#conclusion">Conclusiones</a></li>
         </ul>
       </nav>
 
+      <!-- ====================================================== -->
       <!-- Main -->
+      <!-- ====================================================== -->
+
       <div id="main">
         <div class="inner">
           <!-- ====================================================== -->
@@ -101,21 +116,16 @@
                 margin: 0 auto 20px auto;
               "
             >
-                    Desarrollo de un modelo de Deep Learning basado en redes
-                    LSTM para la predicción a corto plazo (1 hora) de la calidad
-                    del aire. Utiliza series temporales históricas de PM2.5 y
-                    variables meteorológicas para capturar dinámicas
-                    atmosféricas complejas.
+              Modelo de Deep Learning basado en redes LSTM para predecir la
+              concentración de PM2.5 con un horizonte de una hora, a partir de
+              series temporales locales de calidad del aire y variables
+              meteorológicas.
             </p>
 
             <p>
-              <strong>Data Scientist</strong>
-
-              <br />
-
-              Página en desarrollo
+              <strong>Desarrollador independiente</strong>
             </p>
-            
+
             <ul class="actions special">
               <li>
                 <a href="../index.html" class="button">
@@ -124,8 +134,543 @@
               </li>
             </ul>
 
+            <figure
+              style="margin-top: 3rem; margin-bottom: 3rem; text-align: center"
+            >
+              <span class="image fit" style="margin-top: 3rem">
+                <img
+                  src="../images/lstm/result.png"
+                  alt="Interfaz Principal"
+                  style="
+                    max-width: 80%;
+                    height: auto;
+                    display: block;
+                    margin: 0 auto;
+                  "
+                />
+              </span>
+              <figcaption
+                style="
+                  font-style: italic;
+                  font-size: 0.9rem;
+                  color: #777;
+                  margin-top: 0.75rem;
+                "
+              >
+                El modelo integra múltiples variables ambientales y
+                meteorológicas para predecir la concentración de PM2.5 a corto
+                plazo (1 hora) en una de las estaciones de monitoreo de la red
+                chilena.
+              </figcaption>
+            </figure>
+          </section>
 
+          <!-- ═══════════ CONTEXTO ═══════════ -->
+          <section id="context">
+            <h2>Contexto del Problema y Objetivos Técnicos</h2>
+
+            <div class="row">
+              <div class="col-12">
+                <p>
+                  La capacidad de
+                  <strong
+                    >anticipar episodios de contaminación atmosférica</strong
+                  >
+                  constituye una herramienta fundamental para la gestión de la
+                  calidad del aire. Un pronóstico confiable de las
+                  concentraciones de PM2.5 permite implementar medidas
+                  preventivas antes de que ocurran eventos críticos, como
+                  restricciones a emisiones industriales, gestión del tránsito,
+                  recomendaciones a la población sensible y apoyo a la toma de
+                  decisiones por parte de las autoridades ambientales. En este
+                  contexto, disponer de predicciones de corto y largo plazo
+                  resulta tan relevante como contar con mediciones en tiempo
+                  real.
+                </p>
+
+                <p>
+                  Los modelos tradicionales de pronóstico atmosférico se basan
+                  en la resolución numérica de ecuaciones físicas que describen
+                  el transporte, dispersión y transformación química de
+                  contaminantes. Estos modelos requieren una gran cantidad de
+                  información meteorológica, emisiones, topografía y datos
+                  satelitales de escala regional y global, además de un elevado
+                  costo computacional para su ejecución operacional.
+                </p>
+
+                                <p>
+                  El objetivo de este proyecto es evaluar si una arquitectura
+                  <strong>LSTM</strong>, alimentada únicamente con información
+                  histórica local, es capaz de anticipar la concentración de
+                  PM2.5 con una hora de antelación. La red aprende de forma
+                  automática las dependencias temporales entre el contaminante
+                  objetivo y las variables meteorológicas, identificando
+                  patrones recurrentes asociados a la dinámica atmosférica sin
+                  necesidad de resolver explícitamente modelos físicos de gran
+                  escala.
+                </p>
+
+                <blockquote>
+                  "Mientras los modelos físicos buscan reproducir la atmósfera
+                  resolviendo sus ecuaciones fundamentales, las redes LSTM
+                  aprenden directamente de la historia local, identificando
+                  patrones temporales que permiten realizar pronósticos precisos
+                  con un costo computacional significativamente menor."
+                </blockquote>
+              </div>
+            </div>
+          </section>
+
+          <hr />
+
+          <!-- ═══════════ DATOS ═══════════ -->
+          <section id="data">
+            <h2>Conjunto de Datos</h2>
+
+            <div class="row">
+              <div class="col-12">
+                <p>
+                  El modelo fue entrenado utilizando información proveniente de
+                  la estación Parque O'Higgins</strong>,
+                  perteneciente a la red oficial del Sistema Nacional de Información de Calidad del Aire
+                    (SINCA)</strong
+                  >
+                  del Ministerio del Medio Ambiente de Chile. Los registros
+                  fueron descargados desde los servidores Airviro de SINCA y
+                  corresponden a mediciones horarias continuas de contaminantes
+                  atmosféricos y variables meteorológicas.
+                </p>
+
+                <p>
+                  El período de estudio comprende desde el
+                  <strong>1 de enero de 2022</strong> hasta el
+                  <strong>15 de junio de 2026</strong>, abarcando más de cuatro
+                  años de observaciones. Esta extensión temporal permite
+                  incorporar variaciones estacionales, eventos extremos y
+                  cambios meteorológicos característicos de distintas épocas del
+                  año, proporcionando un conjunto de entrenamiento
+                  suficientemente representativo para el aprendizaje de patrones
+                  temporales.
+                </p>
+              </div>
+            </div>
+
+            <!-- Imagen de la estación y series -->
+            <div class="row" style="margin-bottom: 2rem">
+              <div
+                class="col-12"
+                style="display: flex; justify-content: center"
+              >
+                <img
+                  src="../images/lstm/dataset.png"
+                  alt="Estación Parque O'Higgins y series temporales utilizadas para el entrenamiento"
+                  style="max-width: 92%; height: auto"
+                />
+              </div>
+            </div>
+
+<div class="row">
+              <div class="col-12">
+                <h3>Variables utilizadas</h3>
+
+                <ul style="columns: 4; -webkit-columns: 4; -moz-columns: 2">
+                  <li><strong>PM2.5</strong> (variable objetivo)</li>
+                  <li>PM10</li>
+                  <li>NO (Óxido Nítrico)</li>
+                  <li>NO₂ (Dióxido de Nitrógeno)</li>
+                  <li>CO (Monóxido de Carbono)</li>
+                  <li>Ozono</li>
+                  <li>Temperatura del aire</li>
+                  <li>Humedad relativa</li>
+                  <li>Velocidad del viento</li>
+                  <li>Dirección del viento</li>
+                </ul>
+
+                <p>
+                  Todas las variables se encuentran muestreadas con
+                  <strong>resolución horaria</strong>, formando un data set de
+                  10 series temporales utilizado para entrenar el modelo de
+                  Deep Learning. Para abordar el problema desde un enfoque supervisado, cada
+                  muestra de entrenamiento se construye mediante una ventana
+                  deslizante de 24 horas. En consecuencia, la red recibe como
+                  entrada las observaciones registradas durante las últimas 24
+                  horas de todas las variables predictoras (incluido el propio
+                  PM2.5) y aprende a
+                  <strong
+                    >predecir la concentración de PM2.5 una hora hacia el
+                    futuro</strong
+                  >.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <hr />
+          <!-- ═══════════ ANÁLISIS EXPLORATORIO ═══════════ -->
+          <section id="eda">
+            <h2>Análisis Exploratorio de los Datos</h2>
+
+            <div class="row">
+              <div
+                class="col-7 col-12-medium"
+                style="display: flex; justify-content: center"
+              >
+                <img
+                  src="../images/lstm/corr_matrix.png"
+                  alt="Matriz de correlación entre las variables ambientales"
+                  style="max-width: 100%; height: auto"
+                />
+              </div>
+
+              <div class="col-5 col-12-medium">
+                <p>
+                  Como parte del análisis exploratorio se evaluó la
+                  correlación lineal entre todas las variables ambientales
+                  consideradas en el estudio. La matriz permite identificar
+                  qué variables presentan mayor asociación con la
+                  concentración de PM2.5 y, por tanto, cuáles poseen un mayor
+                  potencial predictivo para el modelo.
+                </p>
+
+                <p>
+                  Se observa que
+                  <strong>PM2.5 presenta una fuerte correlación positiva</strong>
+                  con <strong>PM10, CO, NO y NO₂</strong>, indicando que estos
+                  contaminantes evolucionan conjuntamente y aportan
+                  información para estimar las concentraciones futuras de
+                  material particulado fino.
+                </p>
+
+                <p>
+                  Además, variables como la
+                  <strong>temperatura del aire</strong>, la
+                  <strong>velocidad del viento</strong> y el
+                  <strong>ozono (O₃)</strong> muestran correlaciones negativas
+                  con PM2.5, comportamiento consistente con condiciones
+                  atmosféricas que favorecen la dispersión o transformación de
+                  los contaminantes presentes en la atmósfera.
+                </p>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-12">
+                <blockquote>
+                  La matriz de correlación permite verificar que las
+                  variables meteorológicas y los contaminantes gaseosos
+                  contienen información complementaria para explicar la
+                  variabilidad temporal del PM2.5, justificando su
+                  incorporación conjunta como entradas del modelo LSTM.
+                </blockquote>
+              </div>
+            </div>
+          </section>
+
+          <hr />
+
+          <!-- ═══════════ MODELOS LSTM ═══════════ -->
+          <section id="models">
+            <h2>Modelos LSTM Propuestos</h2>
+
+            <div class="row">
+              <div class="col-12">
+                <p>
+                  Con el objetivo de estudiar el efecto de la arquitectura y
+                  de la memoria temporal sobre el desempeño predictivo, se
+                  implementaron tres modelos utilizando
+                  <strong>TensorFlow/Keras</strong>. Todos fueron entrenados
+                  mediante el optimizador <strong>Adam</strong>, función de
+                  pérdida <strong>Mean Squared Error (MSE)</strong> y una
+                  estrategia de <strong>Early Stopping</strong> para prevenir
+                  sobreajuste.
+                </p>
+
+                <p>
+                  Las configuraciones difieren principalmente en la
+                  complejidad de la red y en el tamaño de la ventana temporal
+                  utilizada como entrada, permitiendo comparar modelos con
+                  distinta capacidad para capturar dependencias de corto y
+                  largo plazo.
+                </p>
+              </div>
+            </div>
+
+            <!-- ====================================================== -->
+            <!-- TABLA -->
+            <!-- ====================================================== -->
+
+            <div class="row">
+              <div class="col-12">
+                <div class="table-wrapper">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Modelo</th>
+                        <th>Ventana Temporal</th>
+                        <th>Arquitectura</th>
+                        <th>Objetivo</th>
+                      </tr>
+                    </thead>
+
+                    <tbody>
+                      <tr>
+                        <td><strong>Modelo 1</strong></td>
+                        <td>24 horas</td>
+                        <td>LSTM(64) → Dense(32) → Dense(1)</td>
+                        <td>Modelo base de referencia.</td>
+                      </tr>
+
+                      <tr>
+                        <td><strong>Modelo 2</strong></td>
+                        <td>24 horas</td>
+                        <td>LSTM(64) → Dropout → LSTM(32) → Dense(1)</td>
+                        <td>Mayor profundidad y regularización.</td>
+                      </tr>
+
+                      <tr>
+                        <td><strong>Modelo 3</strong></td>
+                        <td>168 horas (7 días)</td>
+                        <td>LSTM(64) → Dense(32) → Dense(1)</td>
+                        <td>Capturar ciclos semanales completos.</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <hr />
+
+            <!-- ====================================================== -->
+            <!-- ARQUITECTURA -->
+            <!-- ====================================================== -->
+
+            <div style="margin-top: 2rem">
+              <h3 style="text-align: left">Arquitectura del Modelo Base</h3>
+
+              <p>
+                La arquitectura base corresponde a una red
+                <strong>Long Short-Term Memory (LSTM)</strong> diseñada para
+                realizar pronósticos horarios de PM2.5 a partir de una
+                <strong>ventana temporal de 24 horas</strong>. Cada secuencia
+                de entrada posee dimensión <strong>(24 × 10)</strong>, donde
+                las diez variables ambientales son procesadas de manera
+                conjunta para capturar su evolución temporal.
+              </p>
+
+              <div style="display: flex; justify-content: center; margin: 2rem 0">
+                <img
+                  src="../images/lstm/arquitectura.png"
+                  alt="Arquitectura del Modelo LSTM"
+                  style="max-width: 90%; height: auto"
+                />
+              </div>
+
+              <p>
+                El modelo utiliza una capa LSTM de 64 unidades para aprender
+                las dependencias temporales presentes en la serie. La
+                representación obtenida es refinada mediante una capa Dense
+                de 32 neuronas con activación ReLU, mientras que una neurona
+                de salida lineal genera la predicción de la concentración de
+                PM2.5 para la hora siguiente.
+              </p>
+            </div>
+          </section>
+
+          <hr />
+
+<!-- ═══════════ RESULTADOS ═══════════ -->
+          <section id="results">
+            <h2>Resultados</h2>
+
+            <div class="row">
+              <div class="col-12">
+                <p>
+                  Los tres modelos fueron evaluados sobre el conjunto de
+                  prueba utilizando las métricas <strong>MAE</strong>,
+                  <strong>RMSE</strong> y <strong>R²</strong>. La siguiente
+                  tabla resume el desempeño obtenido por cada arquitectura,
+                  junto con el coeficiente de determinación comparado de forma
+                  gráfica.
+                </p>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-7 col-12-medium">
+                <div class="table-wrapper">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Modelo</th>
+                        <th>Ventana Temporal</th>
+                        <th>MAE</th>
+                        <th>RMSE</th>
+                        <th>R²</th>
+                      </tr>
+                    </thead>
+
+                    <tbody>
+                      <tr>
+                        <td><strong>Modelo 1</strong></td>
+                        <td>24 h</td>
+                        <td>5,36</td>
+                        <td>7,66</td>
+                        <td>0,801</td>
+                      </tr>
+
+                      <tr>
+                        <td><strong>Modelo 2</strong></td>
+                        <td>24 h</td>
+                        <td>5,34</td>
+                        <td>7,94</td>
+                        <td>0,787</td>
+                      </tr>
+
+                      <tr>
+                        <td><strong>Modelo 3</strong></td>
+                        <td>168 h</td>
+                        <td>5,32</td>
+                        <td>7,64</td>
+                        <td>0,803</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div
+                class="col-5 col-12-medium"
+                style="display: flex; justify-content: center; align-items: center"
+              >
+                <img
+                  src="../images/lstm/r2_metric.png"
+                  alt="Comparación del R² entre los tres modelos"
+                  style="max-width: 100%; height: auto"
+                />
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-12">
+                <p>
+                  El <strong>Modelo 3</strong>, entrenado con una ventana de
+                  168 horas, obtuvo el mejor desempeño global: el
+                  <strong>R² más alto (0,803)</strong> y el
+                  <strong>MAE más bajo (5,32)</strong>, lo que sugiere que
+                  incorporar el ciclo semanal completo aporta información
+                  relevante para el pronóstico. El
+                  <strong>Modelo 2</strong>, pese a contar con mayor
+                  profundidad y regularización, no logró superar al modelo
+                  base (Modelo 1), lo que indica que aumentar la complejidad
+                  de la red no se tradujo en una mejor capacidad de
+                  generalización para este problema. En conjunto, las
+                  diferencias entre los tres modelos son moderadas (R² entre
+                  0,787 y 0,803), lo que sugiere que la ventana de 24 horas ya
+                  captura gran parte de la señal predictiva relevante.
+                </p>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-12">
+                <h3 style="text-align: left">
+                  Series de Tiempo: Predicción vs. Observación
+                </h3>
+              </div>
+            </div>
+
+<div class="row">
+              <div class="col-12">
+                <h4 style="text-align: center">Modelo 1</h4>
+                <div style="display: flex; justify-content: center">
+                  <img
+                    src="../images/lstm/model_1.png"
+                    alt="Serie de tiempo: predicción vs. observación, Modelo 1"
+                    style="max-width: 75%; max-height: 500px; width: auto; height: auto"
+                  />
+                </div>
+              </div>
+            </div>
+            <br>
+            <div class="row">
+              <div class="col-12">
+                <h4 style="text-align: center">Modelo 2</h4>
+                <div style="display: flex; justify-content: center">
+                  <img
+                    src="../images/lstm/model_2.png"
+                    alt="Serie de tiempo: predicción vs. observación, Modelo 2"
+                    style="max-width: 75%; max-height: 500px; width: auto; height: auto"
+                  />
+                </div>
+              </div>
+            </div>
+            <br>
+            <div class="row">
+              <div class="col-12">
+                <h4 style="text-align: center">Modelo 3</h4>
+                <div style="display: flex; justify-content: center">
+                  <img
+                    src="../images/lstm/model_3.png"
+                    alt="Serie de tiempo: predicción vs. observación, Modelo 3"
+                    style="max-width: 75%; max-height: 500px; width: auto; height: auto"
+                  />
+                </div>
+              </div>
+            </div>  
+          </section>
+
+          <hr />
+
+
+<!-- ═══════════ STACK TECNOLÓGICO ═══════════ -->
+          <section id="stack">
+            <h2>Stack Tecnológico</h2>
+
+            <div class="row">
+              <div class="col-12">
+                <p>
+                  El proyecto fue desarrollado en <strong>Python</strong>,
+                  utilizando <strong>TensorFlow/Keras</strong> para el diseño
+                  y entrenamiento de los modelos LSTM, <strong>Pandas</strong>
+                  y <strong>NumPy</strong> para el procesamiento de los datos,
+                  y <strong>Matplotlib</strong> para la generación de
+                  gráficos.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <hr />
+
+          <!-- ═══════════ CONCLUSIONES ═══════════ -->
+          <section id="conclusion">
+            <h2>Conclusiones</h2>
+
+            <div class="row">
+              <div class="col-12">
+                <p>
+                  Los resultados muestran que una red LSTM alimentada
+                  únicamente con información histórica local es capaz de
+                  pronosticar la concentración de PM2.5 con una hora de
+                  antelación y un desempeño competitivo (R² entre 0,787 y
+                  0,803), sin recurrir a modelos físicos de gran escala. La
+                  ventana de 168 horas obtuvo el mejor resultado, sugiriendo
+                  que el ciclo semanal aporta información útil, aunque las
+                  diferencias frente a la ventana de 24 horas son moderadas.
+                  Como trabajo futuro, se plantea extender el horizonte de
+                  predicción más allá de una hora y evaluar la incorporación
+                  de datos de otras estaciones de monitoreo.
+                </p>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <!-- ====================================================== -->
       <!-- Footer -->
+      <!-- ====================================================== -->
 
       <footer id="footer">
         <div class="inner">

@@ -36,15 +36,31 @@
 
       <nav id="menu">
         <h2>Navegación</h2>
+
         <ul>
           <li><a href="../index.html">Inicio</a></li>
+
           <li><a href="#overview">Proyecto</a></li>
+
           <li><a href="#challenges">Objetivos</a></li>
+
           <li><a href="#role">Mi Rol</a></li>
+
           <li><a href="#architecture">Arquitectura</a></li>
+
           <li><a href="#results">Resultados</a></li>
+
           <li><a href="#segmentation">Segmentación</a></li>
+
+          <li><a href="#optimization">Optimización</a></li>
+
+          <li><a href="#gallery">Galería</a></li>
+
           <li><a href="#video">Video Demo</a></li>
+
+          <li><a href="#stack">Tecnologías</a></li>
+
+          <li><a href="#status">Estado del Proyecto</a></li>
         </ul>
       </nav>
 
@@ -329,31 +345,45 @@
           <section id="segmentation">
             <h2>Experimentación en Segmentación Celular</h2>
             <p>
-              Como línea exploratoria de investigación dentro del proyecto,
-              realicé pruebas preliminares orientadas a la detección y
-              segmentación automática de células utilizando las imágenes ya
-              reconstruidas.
+              Como línea exploratoria de investigación dentro del proyecto, desarrollé un
+              pipeline de procesamiento de imágenes orientado a la segmentación automática
+              de glóbulos rojos y a la extracción de características morfológicas a partir de
+              las imágenes reconstruidas.
             </p>
-            <p>
-              Estas pruebas experimentales permitieron evaluar la factibilidad
-              técnica de incorporar algoritmos de visión por computador como una
-              etapa predictiva previa para futuros sistemas automatizados de
-              clasificación de patologías.
-            </p>
+
             <div class="row">
               <span class="image fit">
                 <img
-                  src="../images/sickle-scan-app/cell_detection.png"
+                  src="../images/sickle-scan-app/process.png"
                   alt="Segmentación Celular"
-                  style="max-width: 800px; margin: 0 auto"
+                  style="width: 100%; margin: 0 auto"
                 />
               </span>
             </div>
+
+            <p>
+              El flujo de procesamiento comprende cinco etapas principales: (1) adquisición
+              de la imagen original, (2) corrección de fondo mediante sustracción de un
+              fondo gaussiano para homogeneizar la intensidad, (3) segmentación mediante
+              umbralización y operaciones morfológicas, (4) ajuste elipsoidal de cada
+              eritrocito para estimar sus propiedades geométricas y (5) obtención de la
+              forma promedio de la muestra mediante el alineamiento y promediado de los
+              objetos segmentados.
+            </p>
+
+            <p>
+              Este procedimiento permitió caracterizar automáticamente la población celular
+              mediante descriptores geométricos y estadísticos, constituyendo una base para
+              futuras etapas de análisis cuantitativo y clasificación automática de
+              patologías hematológicas mediante técnicas de visión por computador e
+              inteligencia artificial.
+            </p>
+
           </section>
 
           <hr />
 
-          <section>
+          <section id="optimization">
             <h2>Hitos de Optimización Computacional</h2>
             <div class="table-wrapper">
               <table class="alt">
@@ -405,7 +435,7 @@
 
           <hr />
 
-          <section>
+          <section id="gallery">
             <h2>Galería del Proyecto</h2>
             <div class="gallery-scroll">
               <img
@@ -472,7 +502,7 @@
 
           <hr />
 
-          <section>
+          <section id="stack">
             <h2>Tecnologías Utilizadas</h2>
             <div class="row">
               <div class="col-6 col-12-medium">
@@ -512,7 +542,7 @@
 
           <hr />
 
-          <section style="padding-bottom: 2rem">
+          <section id="status" style="padding-bottom: 2rem">
             <h2>Estado Actual del Proyecto</h2>
             <p><strong>Versión actual:</strong> v1.0.0</p>
             <p>
@@ -534,10 +564,10 @@
       </footer>
     </div>
 
-    <script src="assets/js/jquery.min.js"></script>
-    <script src="assets/js/browser.min.js"></script>
-    <script src="assets/js/breakpoints.min.js"></script>
-    <script src="assets/js/util.js"></script>
-    <script src="assets/js/main.js"></script>
+  <script src="../assets/js/jquery.min.js"></script>
+  <script src="../assets/js/browser.min.js"></script>
+  <script src="../assets/js/breakpoints.min.js"></script>
+  <script src="../assets/js/util.js"></script>
+  <script src="../assets/js/main.js"></script>
   </body>
 </html>
